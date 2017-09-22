@@ -1,0 +1,62 @@
+# ./ansible/deploy.yml
+
+# load variables
+- hosts: webserver
+
+  vars_files:
+    - vars/common/main.yml
+
+  become_user: root
+
+  become: yes
+
+  pre_tasks:
+    - name: Create SSL certificates folder
+      file:
+        path: /etc/ssl/dgms.fao.org
+        state: directory
+        mode: 0755
+
+    - name: Copy SSL .key to folder
+      copy:
+        src: ./files/ssl/dgms.fao.org.key
+        dest: "{{ ssl_key_path }}"
+        mode: 0755
+
+    - name: Copy SSL .pem to folder
+      copy:
+        src: ./files/ssl/dgms.fao.org.pem
+        dest: "{{ ssl_pem_path }}"
+        mode: 0755
+
+  roles:
+    - role: nginx
+      nginx_remove_default_vhost: true
+      nginx_vhosts:
+      - listen: "80"
+        server_name: "dgms.fao.org www.dgms.fao.org"
+        return: "301 https://192.168.33.10:443$request_uri"
+        filename: "dgms.fao.org.80.conf"
+      - listen: "443 ssl"
+        ssl: on;
+        server_name: "dgms.fao.org"
+        root: "/var/www/dgms.fao.org"
+        index: "index.php index.html index.htm"
+        state: "present"
+        template: "{{ nginx_vhost_template }}"
+        filename: "dgms.fao.org.conf"
+        extra_parameters: |
+          ssl_certificate     {{ ssl_pem_path }};
+          ssl_certificate_key {{ ssl_key_path }};
+          ssl_protocols       TLSv1 TLSv1.1 TLSv1.2 SSLv3;
+          ssl_ciphers         HIGH:!aNULL:!MD5;
+
+  post_tasks:
+    - name: Copy webapp folder
+      copy:
+        src: ./files/webapp/
+        dest: /var/www/dgms.fao.org
+
+
+
+
