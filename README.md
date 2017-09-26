@@ -5,7 +5,7 @@ Automated deployment example, using Ansible and Vagrant
 
 ```
 $ cd vagrant
-$ vagrant run
+$ vagrant up
 ``` 
 
 ## Ping VM with Ansible

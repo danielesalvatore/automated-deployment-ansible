@@ -40,7 +40,7 @@
       - listen: "443 ssl"
         ssl: on;
         server_name: "dgms.fao.org"
-        root: "/var/www/dgms.fao.org"
+        root: "{{frontend_path}}"
         index: "index.php index.html index.htm"
         state: "present"
         template: "{{ nginx_vhost_template }}"
@@ -52,10 +52,26 @@
           ssl_ciphers         HIGH:!aNULL:!MD5;
 
   post_tasks:
-    - name: Copy webapp folder
+
+    - name: Remove previous backup
+      file:
+        path: "{{frontend_backup_path}}"
+        state: absent
+
+    - name: Backup current frontend
+      command: "cp -rf {{frontend_path}} {{frontend_backup_path}}"
+
+    - name: Remove current frontend folder
+      file:
+        path: "{{frontend_path}}"
+        state: absent
+    
+    - name: Deploy frontend
       copy:
-        src: ./files/webapp/
-        dest: /var/www/dgms.fao.org
+        src: "{{build_path}}"
+        dest: "{{frontend_path}}"
+        mode: 0755
+   
 
 
 
