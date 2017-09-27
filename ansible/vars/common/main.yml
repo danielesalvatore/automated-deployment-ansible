@@ -4,3 +4,5 @@ ssl_pem_path: /etc/ssl/dgms.fao.org/dgms.fao.org.pem
 frontend_path : /var/www/dgms.fao.org
 build_path: ./files/webapp/
 frontend_backup_path : /var/www/dgms.fao.org-backup
+
+static_assets_path: /var/www/html/static/
