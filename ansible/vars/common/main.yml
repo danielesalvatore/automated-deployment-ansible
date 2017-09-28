@@ -1,8 +1,14 @@
-ssl_key_path: /etc/ssl/dgms.fao.org/dgms.fao.org.key
-ssl_pem_path: /etc/ssl/dgms.fao.org/dgms.fao.org.pem
+project_name: dgms.fao.org
 
-frontend_path : /var/www/dgms.fao.org
-build_path: ./files/webapp/
-frontend_backup_path : /var/www/dgms.fao.org-backup
+ssl_base_path: /etc/ssl/
+ssl_key_path: "{{ssl_base_path}}{{project_name}}/{{project_name}}.key"
+ssl_pem_path: "{{ssl_base_path}}{{project_name}}/{{project_name}}.pem"
+ssl_key_local_path: "./files/ssl/dgms.fao.org.key"
+ssl_pem_local_path: "./files/ssl/dgms.fao.org.pem"
 
-static_assets_path: /var/www/html/static/
+frontend_base_path: "/var/www/html/"
+frontend_path : "{{frontend_base_path}}{{project_name}}/"
+build_path: "./files/webapp/"
+frontend_backup_path : "{{frontend_base_path}}{{project_name}}-backup"
+
+static_assets_path: "{{frontend_base_path}}static/"

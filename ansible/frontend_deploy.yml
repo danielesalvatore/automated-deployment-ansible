@@ -1,0 +1,33 @@
+---
+
+- hosts: webserver
+
+  vars_files:
+    - vars/common/main.yml
+
+  become_user: root
+
+  become: yes
+  
+  tasks:
+
+    - name: Remove previous backup
+      file:
+        path: "{{frontend_backup_path}}"
+        state: absent
+
+    - name: Backup current frontend
+      command: "cp -rf {{frontend_path}} {{frontend_backup_path}}"
+      ignore_errors: yes
+
+    - name: Remove current frontend folder
+      file:
+        path: "{{frontend_path}}"
+        state: absent
+    
+    - name: Deploy frontend
+      copy:
+        src: "{{build_path}}"
+        dest: "{{frontend_path}}"
+        mode: 0755
+   
