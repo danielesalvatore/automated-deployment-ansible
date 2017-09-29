@@ -1,0 +1,24 @@
+---
+
+- hosts: webserver
+
+  vars_files:
+    - vars/common/main.yml
+
+  become_user: root
+
+  become: yes
+  
+  tasks:
+
+    - name: Backup frontend
+      copy:
+        command: "cp -rf {{frontend_path}} {{frontend_down_path}}"
+
+    - name: Remove frontend folder
+      file:
+        path: "{{frontend_path}}"
+        state: absent
+    
+    - name: Deploy offline page
+      command: "cp -rf {{offline_page_path}} {{frontendend_path}}"

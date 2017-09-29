@@ -1,0 +1,30 @@
+---
+
+- hosts: webserver
+
+  vars_files:
+    - vars/common/main.yml
+
+  become_user: root
+
+  become: yes
+  
+  tasks:
+
+    - name: Stop current backend version
+      command: "killall node"
+      ignore_errors: yes
+
+    - name: Remove previous backend backup
+      file:
+        path: "{{backend_backup_path}}"
+        state: absent
+
+    - name: Backup backend frontend
+      command: "mv {{backend_path}} {{backend_backup_path}}"
+
+    - name: Move zipped backend and unarchive
+      unarchive:
+        src: "{{backend_local_path}}"
+        dest: "{{backend_path}}"
+   

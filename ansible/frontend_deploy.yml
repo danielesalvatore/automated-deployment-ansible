@@ -11,7 +11,7 @@
   
   tasks:
 
-    - name: Remove previous backup
+    - name: Remove previous frontend backup
       file:
         path: "{{frontend_backup_path}}"
         state: absent
@@ -27,7 +27,7 @@
     
     - name: Deploy frontend
       copy:
-        src: "{{build_path}}"
+        src: "{{frontend_local_path}}"
         dest: "{{frontend_path}}"
         mode: 0755
    

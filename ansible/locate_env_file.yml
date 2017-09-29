@@ -1,0 +1,19 @@
+---
+
+- hosts: webserver
+
+  vars_files:
+    - vars/common/main.yml
+
+  become_user: root
+
+  become: yes
+  
+  tasks:
+
+    - name: Deploy .env file
+      copy:
+        src: "{{env_local_path}}"
+        dest: "{{env_path}}"
+        mode: 0755
+   

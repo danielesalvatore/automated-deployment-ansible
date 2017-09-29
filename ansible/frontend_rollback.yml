@@ -1,0 +1,20 @@
+---
+
+- hosts: webserver
+
+  vars_files:
+    - vars/common/main.yml
+
+  become_user: root
+
+  become: yes
+  
+  tasks:
+
+    - name: Remove fronted
+      file:
+        path: "{{frontend_path}}"
+        state: absent
+    
+    - name: Deploy backup-ed frontend
+      command: "cp -rf {{frontend_backup_path}} {{frontend_path}}"

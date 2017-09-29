@@ -1,4 +1,5 @@
 project_name: dgms.fao.org
+offline_page: offlinePage
 
 ssl_base_path: /etc/ssl/
 ssl_key_path: "{{ssl_base_path}}{{project_name}}/{{project_name}}.key"
@@ -6,9 +7,20 @@ ssl_pem_path: "{{ssl_base_path}}{{project_name}}/{{project_name}}.pem"
 ssl_key_local_path: "./files/ssl/dgms.fao.org.key"
 ssl_pem_local_path: "./files/ssl/dgms.fao.org.pem"
 
-frontend_base_path: "/var/www/html/"
-frontend_path : "{{frontend_base_path}}{{project_name}}/"
-build_path: "./files/webapp/"
-frontend_backup_path : "{{frontend_base_path}}{{project_name}}-backup"
+deployment_root_path: "/var/www/html/"
+offline_page_path: "{{deployment_root_path}}{{offline_page}}/"
+static_assets_path: "{{deployment_root_path}}static/"
 
-static_assets_path: "{{frontend_base_path}}static/"
+frontend_local_path: "./files/frontend/"
+frontend_folder_name: "{{project_name}}_frontend"
+frontend_path : "{{deployment_root_path}}{{frontend_folder_name}}/"
+frontend_backup_path : "{{deployment_root_path}}{{frontend_folder_name}}-backup"
+frontend_down_path : "{{deployment_root_path}}{{frontend_folder_name}}-down"
+
+backend_local_path: "./files/backend/"
+backend_folder_name: "{{project_name}}_backend"
+backend_path : "{{deployment_root_path}}{{backend_folder_name}}/"
+backend_backup_path : "{{deployment_root_path}}{{backend_folder_name}}-backup"
+
+env_local_path: "./files/env/.env"
+env_path: "/root/DGMS/server/env/.env"
